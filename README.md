@@ -73,7 +73,7 @@ pip install --upgrade pip
 ```bash
 pip install isaacsim[all,extscache]==5.1.0 --extra-index-url https://pypi.nvidia.com
 ```
-Here is a short, clean section you can directly add to your GitHub guide:
+
 
 ---
 
