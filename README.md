@@ -10,9 +10,9 @@
 
 This guide describes the complete installation procedure for **NVIDIA Isaac Sim 5.1 (Workstation version)** on Ubuntu Linux with a dedicated NVIDIA GPU.
 
-The workstation installation method is recommended when running Isaac Sim as a **GUI-based desktop application** for robotics simulation and development.
+The workstation (standalone ZIP) installation method is recommended when running Isaac Sim as a **GUI-based desktop application** for robotics simulation and development.
 
-The steps are based on the official NVIDIA documentation and organized for clear installation, configuration, and initial validation:
+The steps are based on the official NVIDIA documentation and organized for clear installation, configuration and initial validation:
 [https://docs.isaacsim.omniverse.nvidia.com/5.1.0/index.html](https://docs.isaacsim.omniverse.nvidia.com/5.1.0/index.html)
 
 ---
@@ -327,7 +327,7 @@ Use snapping if necessary for better alignment.
 
 ---
 
-## Step 5 – Run Simulation (Collision & Stability Test)
+## Step 5 – Run Simulation
 
 Click **Play**.
 
@@ -342,7 +342,7 @@ This test validates:
 
 * Multi-body collision interaction
 * Stacking stability
-* Real-time rigid body simulation
+* Real time rigid body simulation
 * Physics solver behavior
 
 ---
