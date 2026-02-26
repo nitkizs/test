@@ -136,9 +136,7 @@ In the popup window:
 
 ---
 
-# 6. Python Environment Setup (For Pip-Based Installation)
-
-### Important Clarification
+# 6. Python Environment Setup
 
 For the **standalone workstation (ZIP) installation**, a built-in Python runtime is already included. Therefore, creating a separate Conda environment is **not mandatory**.
 
