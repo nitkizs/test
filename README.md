@@ -201,3 +201,149 @@ isaacsim
 
 ---
 
+
+# 9. Functional Testing and Physics Validation in Isaac Sim
+
+This section demonstrates basic simulation validation using built-in assets and environments. The objective is to verify rendering, physics behavior, gravity, collision detection, and real-time simulation stability.
+
+---
+
+## 9.1 Basic Physics Test (Primitive Objects)
+
+This test validates gravity, rigid body physics, and collision behavior using simple geometric objects.
+
+### Step 1 – Create a Ground Plane
+
+1. Navigate to:
+   **Create → Physics → Ground Plane**
+2. A default ground plane will be added to the stage.
+
+---
+
+### Step 2 – Add a Light Source
+
+1. Navigate to:
+   **Create → Light → Distant Light**
+2. Adjust intensity if needed to improve visibility.
+
+---
+
+### Step 3 – Add a Primitive Object
+
+1. Navigate to:
+   **Create → Shapes**
+2. Add one of the following:
+
+   * Cube
+   * Cone
+   * Cylinder
+
+The object will appear at the origin of the stage.
+
+---
+
+### Step 4 – Enable Physics on the Object
+
+1. Select the object in the Stage panel.
+2. Right-click → **Add → Physics → Rigid Body with collider preset**
+
+This enables gravity and collision behavior.
+
+---
+
+### Step 5 – Run Simulation
+
+Click the **Play** button in the toolbar.
+
+![guide1](https://github.com/user-attachments/assets/d4222c22-e9b4-4ece-a896-7ac1c669be4a)
+
+Expected result:
+
+* The object falls due to gravity.
+* It collides with the ground plane.
+* It settles naturally based on physics parameters.
+
+This confirms:
+
+* Physics engine is functioning
+* Gravity is active
+* Collision detection is working
+
+---
+
+# 9.2 Environment Loading Test (Warehouse Scene)
+
+## Step 1 – Load an Environment
+
+In the left category panel:
+
+1. Navigate to:
+
+   ```
+   Content
+   ```
+2. Select Environments
+2. Select a warehouse-type environment.
+3. Double-click the environment to load it into the stage.
+
+The warehouse scene will now appear in the viewport.
+
+---
+## Step 2 – Open SimReady Explorer
+
+1. Go to:
+   **Window → Browsers → SimReady Explorer**
+
+2. A new panel will appear in the lower section of the interface
+
+---
+
+## Step 3 – Add Assets from SimReady Explorer
+
+1. Stay inside **SimReady Explorer**
+
+2. Browse categories such as:
+
+   * BUILDING COMPONENT
+   * CONTAINER
+   * EQUIPMENT
+   * FURNITURE
+
+3. Select assets (e.g., pallets, boxes, containers).
+
+4. Drag and drop them into the scene.
+
+---
+
+## Step 4 – Stacking Multiple Assets
+
+You can:
+
+* Hold multiple assets
+* Move them vertically using the **Move Tool (W)**
+* Stack them on top of each other
+
+Use snapping if necessary for better alignment.
+
+---
+
+## Step 5 – Run Simulation (Collision & Stability Test)
+
+Click **Play**.
+
+Expected behavior:
+
+* Stacked objects may shift or collapse depending on balance.
+* Objects collide naturally.
+* Crashes and impacts are physically simulated.
+* Warehouse floor acts as static collision surface.
+
+This test validates:
+
+* Multi-body collision interaction
+* Stacking stability
+* Real-time rigid body simulation
+* Physics solver behavior
+
+---
+
