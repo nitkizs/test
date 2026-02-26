@@ -10,9 +10,9 @@
 
 This guide describes the complete installation procedure for **NVIDIA Isaac Sim 5.1 (Workstation version)** on Ubuntu Linux with a dedicated NVIDIA GPU.
 
-The workstation installation method is recommended when running Isaac Sim as a **GUI-based desktop application**.
+The workstation installation method is recommended when running Isaac Sim as a **GUI-based desktop application** for robotics simulation and development.
 
-This guide is based on the official NVIDIA documentation:
+The steps are based on the official NVIDIA documentation and organized for clear installation, configuration, and initial validation:
 [https://docs.isaacsim.omniverse.nvidia.com/5.1.0/index.html](https://docs.isaacsim.omniverse.nvidia.com/5.1.0/index.html)
 
 ---
