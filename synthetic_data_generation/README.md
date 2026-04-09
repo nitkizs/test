@@ -36,7 +36,7 @@ Place your USD file inside this repository:
 
 ```
 
-synthetic_data_generation/assets/two_drones1.usd
+synthetic_data_generation/assets/drone_scene_base.usd
 
 ```
 
