@@ -65,7 +65,7 @@ from pxr import Gf, Usd, UsdGeom
 # CONFIG
 # =========================================================
 # Source USD scene that will be referenced into every environment.
-USD_PATH = "synthetic_data_generation/assets/two_drones1.usd"
+USD_PATH = "synthetic_data_generation/assets/drone_scene_base.usd"
 
 # Number of cloned environments and spacing between them in world coordinates.
 NUM_ENVS = 13

@@ -33,7 +33,7 @@ Dataset Output
 
 ## 1. Scene Initialization
 
-- A pre-built USD scene is used as input
+- A pre-built USD scene is used as input (drone_scene_base.usd)
 - The scene must include:
   - a **target drone** (semantic label: `target_drone`)
   - an **observer drone with a camera**
