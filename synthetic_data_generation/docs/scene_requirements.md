@@ -44,7 +44,7 @@ The target drone must be labeled using the Replicator Schema Editor:
 target_drone
 
 ```
-![Pipeline Overview](docs/images/Replicator_Schema_Editor.png)
+![Replicator Schema](images/Replicator_Schema_Editor.png)
 
 This label is used to:
 - identify target pixels in segmentation
