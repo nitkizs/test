@@ -17,11 +17,11 @@ The pipeline produces:
 
 ### 1. Install Isaac Sim
 Follow the official NVIDIA documentation:  
-https://docs.isaacsim.omniverse.nvidia.com/latest/installation/index.html
+https://docs.isaacsim.omniverse.nvidia.com/5.1.0/installation/index.html
 
 ### 2. Install Isaac Lab
 Follow:  
-https://isaac-sim.github.io/IsaacLab/main/source/setup/installation.html
+https://isaac-sim.github.io/IsaacLab/main/source/setup/installation/index.html
 
 > Isaac Lab requires Isaac Sim to be installed first.
 
