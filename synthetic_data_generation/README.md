@@ -59,7 +59,7 @@ multi_env_drone_dataset_generator.py
 Update the following variables if needed:
 
 ```python
-USD_PATH = "synthetic_data_generation/assets/two_drones1.usd"
+USD_PATH = "synthetic_data_generation/assets/drone_scene_base.usd"
 OUTPUT_DIR = "synthetic_data_generation/output"
 ````
 
