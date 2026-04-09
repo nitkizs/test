@@ -1,3 +1,4 @@
+
 # Synthetic Data Generation for Drone Detection (Isaac Lab)
 
 ## Overview
@@ -38,6 +39,11 @@ Place your USD file inside this repository:
 synthetic_data_generation/assets/two_drones1.usd
 
 ```
+
+The scene must contain:
+- a target drone with semantic label `target_drone`
+- an observer drone with a camera
+
 ---
 
 ### 2. Configure Paths
@@ -61,34 +67,12 @@ OUTPUT_DIR = "synthetic_data_generation/output"
 
 ## Run
 
-### 1. Activate Isaac Lab environment
+Refer to [commands.md](commands.md) for complete instructions.
 
-```bash
-conda activate isaaclab
-```
-
----
-
-### 2. Navigate to Isaac Lab directory
-
-```bash
-cd IsaacLab
-```
-
----
-
-### 3. Execute the script
+Quick run (headless):
 
 ```bash
 ./isaaclab.sh -p synthetic_data_generation/multi_env_drone_dataset_generator.py --headless --enable_cameras
-```
-
----
-
-### Optional (with GUI)
-
-```bash
-./isaaclab.sh -p synthetic_data_generation/multi_env_drone_dataset_generator.py --enable_cameras
 ```
 
 ---
@@ -140,4 +124,3 @@ OUTPUT_DIR/
 * Synthetic dataset generation
 * Multi-environment parallel data collection
 
----
