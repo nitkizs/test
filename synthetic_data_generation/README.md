@@ -67,7 +67,7 @@ OUTPUT_DIR = "synthetic_data_generation/output"
 
 ## Run
 
-Refer to [commands.md](commands.md) for complete instructions.
+Refer to [commands.md](docs/commands.md) for complete instructions.
 
 Quick run (headless):
 
