@@ -1,4 +1,3 @@
-````md
 # Commands
 
 ## 1. Activate Isaac Lab environment
@@ -50,5 +49,3 @@ synthetic_data_generation/output/
 └── overlay/
 ```
 
-```
-```
