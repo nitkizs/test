@@ -6,7 +6,7 @@ This script:
 - Moves a target drone along randomized trajectories
 - Captures RGB and semantic segmentation using Isaac Lab cameras
 - Generates YOLO bounding box labels from segmentation
-- Saves RGB (Replicator), labels (.txt), and overlay images
+- Saves RGB (Replicator), labels (.txt) and overlay images
 
 Requirements:
 - USD must contain semantic label: "target_drone"
@@ -31,7 +31,7 @@ from isaaclab.app import AppLauncher
 # =========================================================
 # Standard Isaac Lab launcher setup.
 parser = argparse.ArgumentParser(
-    description="Isaac Lab multi-env RGB + bbox + full trajectory capture using BasicWriter"
+    description="Isaac Lab multi env RGB + bbox + full trajectory capture using BasicWriter"
 )
 AppLauncher.add_app_launcher_args(parser)
 args_cli = parser.parse_args()
@@ -48,7 +48,7 @@ simulation_app = app_launcher.app
 # Imports after launch
 # =========================================================
 # These imports are placed after AppLauncher so the Isaac Sim runtime is
-# already initialized when simulation- and rendering-dependent modules load.
+# already initialized when simulation and rendering dependent modules load.
 import cv2
 import numpy as np
 import omni
@@ -92,7 +92,7 @@ OVERLAY_DIR = os.path.join(OUTPUT_DIR, "overlay")
 
 # Detection label configuration.
 YOLO_CLASS_ID = 0
-TARGET_LABEL = "target_drone"
+TARGET_LABEL = "target_drone"  # Semantic label assigned in the saved USD via the Replicator Schema Editor
 
 # Relative prim paths inside each environment instance.
 CAMERA_REL_PATH = "DJI_Mavic_3/Camera"
@@ -122,7 +122,7 @@ MAVIC04_ROTOR_REL_PATHS = [
 # Helpers
 # =========================================================
 def dbg(msg: str):
-    """Consistent debug-print helper."""
+    """Consistent debug print helper"""
     print(f"[DEBUG] {msg}", flush=True)
 
 
@@ -228,7 +228,7 @@ def squeeze_segmentation(seg: np.ndarray) -> np.ndarray:
     Supported input shapes:
                             seg -> (H,W) or (H,W,1)
                             Output:
-                            (H,W) segmentation ID map
+                            (H,W) 
     """
     seg = np.asarray(seg)
 
@@ -305,8 +305,7 @@ def get_target_id_from_seg_info(single_cam_info, target_label):
 # =========================================================
 def catmull_rom(p0, p1, p2, p3, t):
     """
-    Catmull-Rom spline interpolation.
-
+    Catmull Rom spline interpolation.
     This gives smooth motion through a sequence of control points.
     """
     return 0.5 * (
@@ -320,7 +319,6 @@ def catmull_rom(p0, p1, p2, p3, t):
 def ease_in_out(t):
     """
     Smooth the progression through a segment.
-
     This reduces abrupt starts and stops inside each spline segment.
     """
     return 0.5 * (1.0 - math.cos(math.pi * t))
@@ -399,7 +397,6 @@ def generate_realistic_target_path(start_pos, rng, env_id):
 def spin_rotors(angle, mavic3_rotor_ops, mavic04_rotor_ops):
     """
     Spin rotor meshes for both drones.
-
     This is a visual only effect used to make the scene appear more realistic.
     """
     if len(mavic3_rotor_ops) >= 4:
@@ -511,7 +508,6 @@ def save_yolo_and_overlay(
 def cleanup_label_jsons(env_rep_dirs):
     """
     Remove Replicator-generated label JSON files after capture completes.
-
     These files are useful internally for segmentation metadata handling, but they
     are not needed once custom YOLO labels have been written.
     """
@@ -599,7 +595,7 @@ try:
             rotor_prim = get_prim_or_raise(stage, f"{env_path}/{rel_path}")
             mavic04_rotor_ops.append(get_existing_or_new_rotate_xyz(rotor_prim, allow_create=True))
 
-        # Standard per-environment camera
+        # Standard per environment camera
         camera_cfg = CameraCfg(
             prim_path=cam_path,
             update_period=0,
