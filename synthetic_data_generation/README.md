@@ -139,6 +139,5 @@ OUTPUT_DIR/
 
 * Synthetic dataset generation
 * Multi-environment parallel data collection
-* Training object detection models (e.g., YOLO)
 
 ---
