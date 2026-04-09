@@ -2,10 +2,11 @@
 # Synthetic Data Generation for Drone Detection (Isaac Lab)
 
 ## Overview
-This module generates synthetic training data for drone detection using NVIDIA Isaac Lab.
+This pipeline generates synthetic training data for drone detection using NVIDIA Isaac Lab.
 
-A single USD scene is replicated into multiple parallel environments. A target drone
-moves along randomized trajectories while a fixed observer camera captures data.
+A single USD scene is replicated into multiple parallel environments. Each environment
+includes HDRI based lighting for realism, a moving target drone and a fixed observer
+camera that captures data.
 
 The pipeline produces:
 - RGB images (via Replicator)
@@ -40,9 +41,10 @@ synthetic_data_generation/assets/drone_scene_base.usd
 
 ```
 
-The scene must contain:
-- a target drone with semantic label `target_drone`
-- an observer drone with a camera
+Each environment contains:
+- a target drone (semantic label: "target_drone")
+- an observer drone with a fixed camera
+- environment lighting using an HDRI (for realistic illumination)
 
 ---
 
