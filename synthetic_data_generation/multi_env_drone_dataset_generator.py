@@ -1,5 +1,5 @@
 """
-Multi-environment synthetic data generation for drone detection.
+Multi environment synthetic data generation for drone detection.
 
 This script:
 - Loads a USD scene into multiple parallel environments

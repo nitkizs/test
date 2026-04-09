@@ -30,8 +30,7 @@ DJI_Mavic_3/Camera
 
 ```
 
-- The camera should:
-- be correctly oriented toward the target drone
+- The camera should be correctly oriented toward the target drone
 
 ---
 

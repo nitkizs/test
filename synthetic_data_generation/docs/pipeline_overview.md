@@ -4,9 +4,9 @@
 ## Overview
 
 This pipeline generates synthetic training data for drone detection by combining
-multi-environment simulation, camera-based sensing and post-processing.
+multi environment simulation, camera based sensing and post processing.
 
-A single USD scene is replicated into multiple environments, simulated in parallel,
+A single USD scene is replicated into multiple environments, simulated in parallel
 and used to produce RGB images and YOLO annotations.
 
 ---
@@ -23,7 +23,7 @@ Simulation (Target Motion)
 ↓
 Camera Capture (RGB + Segmentation)
 ↓
-Post-processing (Mask → Bounding Box → YOLO)
+Post processing (Mask → Bounding Box → YOLO)
 ↓
 Dataset Output
 
@@ -33,14 +33,14 @@ Dataset Output
 
 ## 1. Scene Initialization
 
-- A pre-built USD scene is used as input (drone_scene_base.usd)
+- A pre built USD scene is used as input (drone_scene_base.usd)
 - The scene must include:
   - a **target drone** (semantic label: `target_drone`)
   - an **observer drone with a camera**
 
 ---
 
-## 2. Multi-Environment Replication
+## 2. Multi Environment Replication
 
 - The scene is cloned into multiple environments:
 
@@ -65,7 +65,7 @@ Dataset Output
   - easing for smooth transitions
 - Multiple trajectory variations are used across environments
 - Rotor motion is applied for visual realism
-- The **camera remains fixed**
+- The camera remains fixed
 
 ---
 
