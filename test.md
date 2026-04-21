@@ -29,7 +29,6 @@ The extraction process includes:
 * Ensuring all subfolders are properly unpacked
 * Preserving the original folder structure
 
-Maintaining the folder structure is important, as it is used in later stages of the pipeline.
 
 ---
 
@@ -79,77 +78,10 @@ Output:
 dd15_flug-01_09-04-2026_12-32-03_000000.png
 ```
 
-## 4. Data Filtering
-
-The dataset undergoes multiple filtering stages to improve quality and relevance.
-
----
-
-### 4.1 Positive-Negative Filtering (Manual)
-
-* Manually separate:
-
-  * **Positive images** (contain target objects)
-  * **Negative images** (do not contain target objects)
-
----
-
-### 4.2 Model-Based Filtering
-
-Filtering is applied separately to positive and negative datasets using a detection model.
-
-#### For Positive Images:
-
-Images are retained (**Pos-filtered**) under the following conditions:
-
-* Model detects object correctly
-* No detections
-* Low-confidence detections
-* Multiple detections
-
-#### For Negative Images:
-
-Images are retained (**Negs-filtered**) if:
-
-* Any object is detected (to identify challenging negatives)
-
----
-
-### 4.3 HI-Filtering (High-Information Filtering)
-
-This stage removes duplicate or redundant images using feature-based similarity.
-
-#### Process:
-
-* Combine datasets:
-
-  * **UAV Positive Dataset + Pos-filtered**
-  * **UAV Negative Dataset + Negs-filtered**
-
-* Apply:
-
-  * **DINOv2** (feature extraction model)
-
-#### Output:
-
-* **Unique Positive Images**
-* **Unique Negative Images**
-
----
-
-## 5. Final Output
-
-After all filtering stages:
-
-* Cleaned and structured dataset
-* High-quality, non-redundant images
-* Ready for training or further analysis
-
-
 
 # 4. Data Filtering
 
-The dataset undergoes multiple filtering stages to improve quality, remove noise, and ensure relevance for model training. The filtering pipeline is divided into three stages: manual filtering, model-based filtering, and high-impact (uniqueness) filtering.
+The dataset undergoes multiple filtering stages to improve quality and remove noise for model training. The filtering pipeline is divided into three stages: manual filtering, model-based filtering, and high-impact (uniqueness) filtering.
 
 ---
 
@@ -157,7 +89,7 @@ The dataset undergoes multiple filtering stages to improve quality, remove noise
 
 The initial filtering step is performed manually to separate the dataset into positive and negative samples.
 
-* **Positive images** contain the target object (e.g., UAV)
+* **Positive images** contain the target object (UAV)
 * **Negative images** do not contain the target object
 
 **Note:**
@@ -167,7 +99,7 @@ Images where the drone appears below the horizon (e.g., with background such as 
 
 ## 4.2 Model-Based Filtering
 
-Model-based filtering refines the dataset using a detection model. This process is applied separately to positive and negative datasets and consists of two stages: inferencing and filtering.
+Model-based filtering refines the dataset using a latest trained detection model. This process is applied separately to positive and negative datasets and consists of two stages: inferencing and filtering.
 
 ---
 
@@ -188,7 +120,7 @@ A trained model is used to generate predictions on the dataset.
 * `--weights` → Path to the trained model (`.pth`)
 * `--img` → Directory containing input images
 * `--channels` → Number of input channels (default: 3)
-* `--viz` → Enable visualization output (bounding boxes)
+* `--viz` → Enable visualization output in video format
 * `--conf` → Confidence threshold for detections
 * `--iou` → IoU threshold
 * `--exp` → Experiment name (output folder identifier)
@@ -198,7 +130,7 @@ A trained model is used to generate predictions on the dataset.
 
 * Latest trained `.pth` model
 * Compatible `.data` file
-* `uav_sq.names` file (must match the path defined in `.data`)
+* `uav_sq.names` file (keep this file in the path defined in `.data`)
 
 **Execution example:**
 
@@ -214,90 +146,141 @@ python test_images.py \
   --img "/home/dataset/260409/flug-07/Positive/"
 ```
 
+**It generates output in the `output` folder of the cloned repository, including images with bounding boxes and label files (.txt)**
+
 ---
 
 ### Stage 2: Filtering
 
-The inference step generates:
+The inference output (bounding box images and .txt label files) is further processed using a filtering script to categorize images based on detection results and confidence thresholds.
+A threshold value (typically between 0.7 and 0.9 depending on requirements) is used to classify detections.
+Use this script: [model_filtering.py](https://github.com/username/repo-name/blob/main/scripts/image_rename.py)
 
-* Images with bounding boxes
-* Label files (`.txt`) for each image
+This script categorizes .txt outputs into four groups.
 
-These outputs are processed using a filtering script to categorize images based on detection results and confidence thresholds (typically between **0.7–0.9**, depending on requirements).
-
-**Filtering categories:**
-
-1. No detections
-2. Low confidence (below threshold)
-3. High confidence (above threshold)
-4. Multiple detections (potential false positives)
+1. No detections (Images with no detected objects)
+2. Low confidence (Images where detected object confidence is below the defined threshold)
+3. High confidence (Images where detected object confidence exceeds the threshold)
+4. Multiple detections (Images with multiple detected objects,often considered false positives)
 
 ---
 
-### Dataset-Specific Selection
+### Dataset Selection for Further Processing
 
-**For Positive Dataset (used for next stage):**
+The filtered categories are used differently for positive and negative datasets.
 
-* No detections
-* Low confidence
-* Multiple detections
+**Positive Dataset (used for next-stage filtering):**
 
-**For Negative Dataset:**
+* No Detections
+* Low Confidence
+* Multiple Detections
 
-* Low confidence
-* High confidence
-* Multiple detections
+**Negative Dataset:**
 
-The filtering script also generates **XML files** for each category, which are used in subsequent processing steps.
+* Low Confidence
+* High Confidence
+* Multiple Detections
+
+
+The `Model_filtering.py` script also generates **XML files** for each category. These XML files are used to group and manage images in subsequent filtering stages.
 
 **Important:**
-Do not use the model-filtered output images for further filtering stages, as they may be modified (e.g., resized, grayscale). Always use the original images.
+The images generated during model filtering should **not** be used for further processing, as they may be altered (e.g., resized or converted to grayscale). Always use the **original images** for the next stage.
 
 ---
+
 
 ## 4.3 High-Impact Filtering (Uniqueness Filtering)
 
-This stage removes duplicate and redundant images using feature-based similarity.
+This stage focuses on removing duplicate and near-duplicate images to improve dataset quality, reduce redundancy, and ensure diversity for model training. The process is applied separately to positive and negative datasets and uses **DINOv2** for feature-based similarity.
 
-The process is applied separately to positive and negative datasets and uses **DINOv2** for feature extraction.
+Key Benefits of Duplicate Filtering:
+ * Avoid Overfitting: Reduces the risk of overfitting by eliminating redundant images.
+ * Prevent Model Bias: Ensures the model is trained on a diverse set of images.
+ * Improve Training Efficiency: Optimizes training time by reducing the number of images.
+
 
 ---
 
 ### Preparation
 
+Before executing this stage:
+
 * Download existing (previous) positive and negative datasets from the database
-
-* Download corresponding CVAT XML annotations
-
+  *(use the provided download script)*
+* Download the corresponding CVAT XML annotations for the existing datasets
 * Organize datasets into:
 
   * Old Positive / Old Negative
   * New Positive / New Negative
-
-* Generate CVAT XML files for the new datasets using the provided script (`Generate_cvat_xml.py`)
+* Generate CVAT XML files for the new datasets using `Generate_cvat_xml.py`
 
 ---
 
 ### Processing
 
-* Combine datasets:
+* Combine datasets by class:
 
-  * Old Positive + New Positive
-  * Old Negative + New Negative
+  * Old Positive + New Positive → single directory
+  * Old Negative + New Negative → single directory
 
-* Run the high-impact filtering Jupyter Notebook:
+* Run the **near-duplicate filtering notebook (`near-duplicate-filter.ipynb`)**:
 
-  * Update paths for images, XML files, and output directories
-  * Execute the notebook to perform similarity-based filtering
+  * Update paths for:
+
+    * Image directories (old + new)
+    * XML annotation files
+    * Output directories
+  * Execute the notebook separately for:
+
+    * Positive dataset
+    * Negative dataset
+
+The notebook uses feature embeddings to compare images and identify duplicates or highly similar samples.
 
 ---
 
-### Output
+- To perform this filtering step another jupyter notebook is created using the [fiftyone-library](https://docs.voxel51.com/).
+- The notebook performs the following tasks:
+  - Load the dataset to FiftyOne, which consists of an image directory and an XML file corresponding to these images.
+  - Next, select an AI model to use. The selected AI model will be used to generate image embeddings for all the images in the dataset.
+    - An image embedding is a numeric representation of an image that encodes the semantics of contents in the image. 
+    - Embeddings are calculated by computer vision models which are usually trained with large datasets of pairs of text and image.
+  - Once the images embeddings are created, you will compute the uniqueness of each image by choosing a threshold percentage. 
+  - If the similarity between images falls below the threshold, they will be considered duplicates.
+  - Finally, an XML file will be generated containing only the unique images.
+  - Optionally, you can launch the FiftyOne app to visualize the duplicates and better understand the results.
+    
+* The same workflow must be executed independently for:
 
-* Unique Positive Images
-* Unique Negative Images
+  * Positive images
+  * Negative images
 
-This step ensures removal of redundant samples and improves dataset diversity for training.
+### **Additional requirements**
+
+- Based on the requirement of the project, the data can be sampled using a constant sampling rate.
+- This can be achieved using the script [create-cvat-xml-6-frame.py](create-cvat-xml-6-frame.py).
+- The constant sampling rate needs to be calculated based on the project requirement.
+
+---
+
+### Notebook Outputs
+
+For each dataset (positive and negative), the notebook generates:
+
+* **Duplicate XML**
+  Contains images identified as duplicates across both old and new datasets
+
+* **Unique New XML**
+  Contains only unique images from the incoming dataset after duplicate removal
+
+* **Unique Old XML**
+  Contains only unique images from the existing dataset after duplicate removal
+
+These XML files are used to finalize dataset selection and retrieve the corresponding filtered images.
+
+
+
 
 
 
