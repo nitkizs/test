@@ -230,6 +230,8 @@ Before executing this stage:
   * Old Positive + New Positive → single directory
   * Old Negative + New Negative → single directory
 
+
+* To perform this filtering step another jupyter notebook is created using the [fiftyone-library](https://docs.voxel51.com/).
 * Run the **near-duplicate filtering notebook (`near-duplicate-filter.ipynb`)**:
 
   * Update paths for:
@@ -242,11 +244,6 @@ Before executing this stage:
     * Positive dataset
     * Negative dataset
 
-The notebook uses feature embeddings to compare images and identify duplicates or highly similar samples.
-
----
-
-- To perform this filtering step another jupyter notebook is created using the [fiftyone-library](https://docs.voxel51.com/).
 - The notebook performs the following tasks:
   - Load the dataset to FiftyOne, which consists of an image directory and an XML file corresponding to these images.
   - Next, select an AI model to use. The selected AI model will be used to generate image embeddings for all the images in the dataset.
@@ -256,11 +253,6 @@ The notebook uses feature embeddings to compare images and identify duplicates o
   - If the similarity between images falls below the threshold, they will be considered duplicates.
   - Finally, an XML file will be generated containing only the unique images.
   - Optionally, you can launch the FiftyOne app to visualize the duplicates and better understand the results.
-    
-* The same workflow must be executed independently for:
-
-  * Positive images
-  * Negative images
 
 ### **Additional requirements**
 
@@ -268,7 +260,6 @@ The notebook uses feature embeddings to compare images and identify duplicates o
 - This can be achieved using the script [create-cvat-xml-6-frame.py](create-cvat-xml-6-frame.py).
 - The constant sampling rate needs to be calculated based on the project requirement.
 
----
 
 ### Notebook Outputs
 
