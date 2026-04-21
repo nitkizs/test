@@ -253,14 +253,8 @@ Before executing this stage:
   - If the similarity between images falls below the threshold, they will be considered duplicates.
   - Finally, an XML file will be generated containing only the unique images.
   - Optionally, you can launch the FiftyOne app to visualize the duplicates and better understand the results.
-
-### **Additional requirements**
-
-- Based on the requirement of the project, the data can be sampled using a constant sampling rate.
-- This can be achieved using the script [create-cvat-xml-6-frame.py](create-cvat-xml-6-frame.py).
-- The constant sampling rate needs to be calculated based on the project requirement.
-
-
+ 
+    
 ### Notebook Outputs
 
 For each dataset (positive and negative), the notebook generates:
@@ -275,6 +269,15 @@ For each dataset (positive and negative), the notebook generates:
   Contains only unique images from the existing dataset after duplicate removal
 
 These XML files are used to finalize dataset selection and retrieve the corresponding filtered images.
+
+
+### **Additional requirements**
+
+- Based on the requirement of the project, the data can be sampled using a constant sampling rate.
+- This can be achieved using the script [create-cvat-xml-6-frame.py](create-cvat-xml-6-frame.py).
+- The constant sampling rate needs to be calculated based on the project requirement.
+
+
 
 
 
