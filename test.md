@@ -174,12 +174,14 @@ The filtered categories are used differently for positive and negative datasets.
 * No Detections
 * Low Confidence
 * Multiple Detections
+Important: For verification, review high-confidence detections to confirm that detected objects are actual targets and check no-detection images to confirm no targets are present.
 
 **Negative Dataset:**
 
 * Low Confidence
 * High Confidence
 * Multiple Detections
+Important: Verify the detected images to confirm that the identified objects are not the actual target.
 
 
 The `Model_filtering.py` script also generates **XML files** for each category. These XML files are used to group and manage images in subsequent filtering stages.
