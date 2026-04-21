@@ -167,7 +167,7 @@ This script categorizes .txt outputs into four groups.
 
 ### Dataset Selection for Further Processing
 
-The filtered categories are used differently for positive and negative datasets.
+The filtered categories are used differently for positive and negative datasets for high impact filtering.
 
 **Positive Dataset (used for next-stage filtering):**
 
@@ -176,7 +176,7 @@ The filtered categories are used differently for positive and negative datasets.
 * Multiple Detections
 
 
-Important: For verification, review high-confidence detections to confirm that detected objects are actual targets and check no-detection images to confirm no targets are present.
+For verification, review high-confidence detections to confirm that detected objects are actual targets and check no-detection images to confirm no targets are present.
 
 **Negative Dataset:**
 
@@ -185,7 +185,7 @@ Important: For verification, review high-confidence detections to confirm that d
 * Multiple Detections
 
 
-Important: Verify the detected images to confirm that the identified objects are not the actual target.
+Verify the detected images to confirm that the identified objects are not the actual target.
 
 
 The `Model_filtering.py` script also generates **XML files** for each category. These XML files are used to group and manage images in subsequent filtering stages.
