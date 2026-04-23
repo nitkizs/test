@@ -209,7 +209,7 @@ The images generated during model filtering should **not** be used for further p
 
 ## 4.3 High-Impact Filtering (Uniqueness Filtering)
 
-This stage focuses on removing duplicate and near-duplicate images to improve dataset quality, reduce redundancy, and ensure diversity for model training.
+The new incoming data can be similar to the existing dataset, so it is important not to blindly add this to the training set..This stage focuses on removing duplicate and near-duplicate images to improve dataset quality, reduce redundancy, and ensure diversity for model training.
 
 Unlike previous filtering stages, the new dataset is not processed independently. Instead, it is combined with the previously used training dataset to identify and remove redundant samples across both datasets.
 
@@ -235,7 +235,7 @@ Before executing this stage:
 * Download the corresponding **CVAT XML annotations** for both datasets directly from the LakeFS UI
   ([http://ai-lakefs.int.draive.com:8000/repositories](http://ai-lakefs.int.draive.com:8000/repositories) — access required)
 
-* Combine datasets by class:
+* Combine datasets:
 
   * Old Positive images + New Positive images → single directory
   * Old Negative images  + New Negative images → single directory
@@ -291,6 +291,10 @@ For each dataset (**positive** and **negative**), the notebook generates:
   Contains merged unique images from both new and old datasets
 
 These XML files are used to finalize dataset selection and retrieve the corresponding filtered images.
+
+If the new incoming dataset contains unique samples, these will be exported as a CVAT XML file for labeling.
+
+If the new incoming dataset contains only similar samples, a unique (controllable) subset of the new data can be exported for labeling, and the similar samples from the existing training dataset will be deleted. The updated training dataset will also be exported as a CVAT XML file.
 
 
 ### **Additional requirements**
