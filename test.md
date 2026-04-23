@@ -80,13 +80,13 @@ dd15_26-04-09_flug-01_000000.png
 
 ---
 
-# 4. Data Filtering
+## 4. Data Filtering
 
 The dataset undergoes multiple filtering stages to improve quality and remove noise for model training. The filtering pipeline is divided into three stages: manual filtering, model-based filtering, and high-impact (uniqueness) filtering.
 
 ---
 
-## 4.1 Positive–Negative Filtering
+### 4.1 Positive–Negative Filtering
 
 The initial filtering step is performed manually to separate the dataset into positive and negative samples.
 
@@ -100,13 +100,13 @@ Images in which the drone appears below the horizon, for example with background
 
 ---
 
-## 4.2 Model-Based Filtering
+### 4.2 Model-Based Filtering
 
 Model-based filtering refines the dataset using a latest trained detection model. This process is applied separately to positive and negative datasets and consists of two stages: inferencing and filtering.
 
 ---
 
-### Stage 1: Inferencing
+#### Stage 1: Inferencing
 
 A trained model is used to generate predictions on the dataset.
 
@@ -153,7 +153,7 @@ python test_images.py \
 
 ---
 
-### Stage 2: Filtering
+#### Stage 2: Filtering
 
 The inference output (bounding box images and .txt label files) is further processed using a filtering script to categorize images based on detection results and confidence thresholds.
 A threshold value (typically between 0.7 and 0.9 depending on requirements) is used to classify detections.
@@ -176,7 +176,7 @@ Repeat this process for both positive and negative filtered images and save the 
 
 ---
 
-### Dataset Selection for Further Processing
+#### Dataset Selection for Further Processing
 
 The filtered categories are used differently for positive and negative datasets for high impact filtering.
 
@@ -208,7 +208,7 @@ The images generated during model filtering should **not** be used for further p
 
 ---
 
-## 4.3 High-Impact Filtering (Uniqueness Filtering)
+### 4.3 High-Impact Filtering (Uniqueness Filtering)
 
 The new incoming data can be similar to the existing dataset, so it is important not to blindly add this to the training set.
 This stage focuses on removing duplicate and near-duplicate images to improve dataset quality, reduce redundancy, and ensure diversity for model training.
@@ -225,7 +225,7 @@ The process is applied separately to the positive and negative datasets and uses
 
 ---
 
-### Preparation
+#### Preparation
 
 Before executing this stage:
 
@@ -243,7 +243,7 @@ Before executing this stage:
 
 ---
 
-### Processing
+#### Processing
 
 * This filtering step is performed using a Jupyter Notebook built with the [fiftyone-library](https://docs.voxel51.com/).
 
@@ -263,7 +263,7 @@ Before executing this stage:
 
 ---
 
-### Notebook Outputs
+#### Notebook Outputs
 
 For each dataset (**positive** and **negative**), the notebook generates:
 
@@ -284,14 +284,6 @@ These XML files are used to finalize dataset selection and retrieve the correspo
 If the new incoming dataset contains unique samples, these will be exported as a CVAT XML file for labeling.
 
 If the new incoming dataset contains only similar samples, a unique (controllable) subset of the new data can be exported for labeling, and the similar samples from the existing training dataset will be deleted. The updated training dataset will also be exported as a CVAT XML file.
-
----
-
-### Additional requirements
-
-* Based on the requirement of the project, the data can be sampled using a constant sampling rate.
-* This can be achieved using the script [create-cvat-xml-6-frame.py](create-cvat-xml-6-frame.py).
-* The constant sampling rate needs to be calculated based on the project requirement.
 
 ---
 
