@@ -92,8 +92,9 @@ The initial filtering step is performed manually to separate the dataset into po
 * **Positive images** contain the target object (UAV)
 * **Negative images** do not contain the target object
 
-**Note:**
-Images where the drone appears below the horizon (e.g., with background such as ground, trees, or mountains) are excluded from both positive and negative datasets and are not used for further processing.
+Before starting the filtering process, refer to the provided guideline (link) to understand edge cases for both positive and negative samples. Mistakes made at this stage will propagate through subsequent stages, so careful inspection is essential.
+
+**Note:** Images in which the drone appears below the horizon, for example with backgrounds such as ground, trees, or mountains, are treated as negative samples and are used as part of the negative dataset in subsequent stages.
 
 ---
 
@@ -130,7 +131,7 @@ A trained model is used to generate predictions on the dataset.
 
 * Latest trained `.pth` model
 * Compatible `.data` file
-* `uav_sq.names` file (keep this file in the path defined in `.data`)
+* `uav_sq.names` file (Ensure that this file contains the correct class name corresponding to the actual target, "Mavic". The file must be placed in the path specified in the `.data` configuration file.)
 
 **Execution example:**
 
@@ -156,12 +157,18 @@ The inference output (bounding box images and .txt label files) is further proce
 A threshold value (typically between 0.7 and 0.9 depending on requirements) is used to classify detections.
 Use this script: [model_filtering.py](https://github.com/username/repo-name/blob/main/scripts/image_rename.py)
 
-This script categorizes .txt outputs into four groups.
+The script groups outputs into the following categories:
 
-1. No detections (Images with no detected objects)
-2. Low confidence (Images where detected object confidence is below the defined threshold)
-3. High confidence (Images where detected object confidence exceeds the threshold)
-4. Multiple detections (Images with multiple detected objects,often considered false positives)
+* **No detections** – images with no detected objects
+* **Low confidence** – detections below the defined threshold
+* **High confidence** – detections above the defined threshold
+* **Multiple detections (mixed confidence)** – at least one detection below the threshold
+* **Multiple detections (high confidence)** – all detections above the threshold
+
+**Important:**
+For the positive dataset, images with multiple detections require manual verification. These cases may include all correct detections, a mix of correct and false detections, or entirely false detections. Carefully review these images using the verification script (link), which can also be used to inspect results and generate XML files if required.
+
+Repeat this process for both positive and negative filtered images and save the outputs separately for further filtering stages.
 
 ---
 
@@ -169,23 +176,27 @@ This script categorizes .txt outputs into four groups.
 
 The filtered categories are used differently for positive and negative datasets for high impact filtering.
 
-**Positive Dataset (used for next-stage filtering):**
+impact filtering stage.
 
-* No Detections
-* Low Confidence
-* Multiple Detections
+**For the positive dataset, the following categories are used:**
 
+* **No detections**
+* **Low confidence**
+* **Multiple detections (mixed confidence)**
 
-For verification, review high-confidence detections to confirm that detected objects are actual targets and check no-detection images to confirm no targets are present.
-
-**Negative Dataset:**
-
-* Low Confidence
-* High Confidence
-* Multiple Detections
+In addition, images from **Multiple detections (high confidence)** may also be included **only if they are manually verified as false positives**. All other correctly detected images from this category are excluded from further processing.
 
 
-Verify the detected images to confirm that the identified objects are not the actual target.
+
+**For the Negative Dataset, the following categories are used:**
+
+* **Low confidence**
+* **High confidence**
+* **Multiple detections (mixed confidence)**
+* **Multiple detections (high confidence)**
+
+**Note:**
+If detections are present, images may be optionally reviewed to verify whether the detections correspond to actual targets; however, this step is not strictly required.
 
 
 The `Model_filtering.py` script also generates **XML files** for each category. These XML files are used to group and manage images in subsequent filtering stages.
@@ -198,7 +209,11 @@ The images generated during model filtering should **not** be used for further p
 
 ## 4.3 High-Impact Filtering (Uniqueness Filtering)
 
-This stage focuses on removing duplicate and near-duplicate images to improve dataset quality, reduce redundancy, and ensure diversity for model training. The process is applied separately to positive and negative datasets and uses **DINOv2** for feature-based similarity.
+This stage focuses on removing duplicate and near-duplicate images to improve dataset quality, reduce redundancy, and ensure diversity for model training.
+
+Unlike previous filtering stages, the new dataset is not processed independently. Instead, it is combined with the previously used training dataset to identify and remove redundant samples across both datasets.
+
+The process is applied separately to the positive and negative datasets and uses DINOv2 for feature-based similarity comparison.
 
 Key Benefits of Duplicate Filtering:
  * Avoid Overfitting: Reduces the risk of overfitting by eliminating redundant images.
@@ -212,41 +227,45 @@ Key Benefits of Duplicate Filtering:
 
 Before executing this stage:
 
-* Download existing (previous) positive and negative datasets from the database
-  *(use the provided download script)*
-* Download the corresponding CVAT XML annotations for the existing datasets
-* Organize datasets into:
+* Generate **CVAT XML files** for the new datasets (both positive and negative) using `Generate_cvat_xml.py`
 
-  * Old Positive / Old Negative
-  * New Positive / New Negative
-* Generate CVAT XML files for the new datasets using `Generate_cvat_xml.py`
+* Download the **current positive and negative datasets** from the database via LakeFS
+  *(refer to guide: link)*
+
+* Download the corresponding **CVAT XML annotations** for both datasets directly from the LakeFS UI
+  ([http://ai-lakefs.int.draive.com:8000/repositories](http://ai-lakefs.int.draive.com:8000/repositories) — access required)
+
+* Combine datasets by class:
+
+  * Old Positive images + New Positive images → single directory
+  * Old Negative images  + New Negative images → single directory
+
+
+
 
 ---
 
 ### Processing
 
-* Combine datasets by class:
+* This filtering step is performed using a Jupyter Notebook built with the [fiftyone-library](https://docs.voxel51.com/).
 
-  * Old Positive + New Positive → single directory
-  * Old Negative + New Negative → single directory
-
-
-* To perform this filtering step another jupyter notebook is created using the [fiftyone-library](https://docs.voxel51.com/).
 * Run the **near-duplicate filtering notebook (`near-duplicate-filter.ipynb`)**:
 
-  * Update paths for:
+  * Update the following parameters:
 
-    * Image directories (old + new)
+    * Image directory (combined old + new datasets)
     * XML annotation files
-    * Output directories
+    * Output directory
+    * Threshold value *(adjust based on similarity requirements to achieve the desired dataset balance, e.g., ~10–12% negatives relative to positives)*
+
   * Execute the notebook separately for:
 
-    * Positive dataset
-    * Negative dataset
+    * **Positive dataset**
+    * **Negative dataset**
 
 - The notebook performs the following tasks:
   - Load the dataset to FiftyOne, which consists of an image directory and an XML file corresponding to these images.
-  - Next, select an AI model to use. The selected AI model will be used to generate image embeddings for all the images in the dataset.
+  - Next, select an AI model(DINOv2) to use. The selected AI model will be used to generate image embeddings for all the images in the dataset.
     - An image embedding is a numeric representation of an image that encodes the semantics of contents in the image. 
     - Embeddings are calculated by computer vision models which are usually trained with large datasets of pairs of text and image.
   - Once the images embeddings are created, you will compute the uniqueness of each image by choosing a threshold percentage. 
@@ -257,7 +276,7 @@ Before executing this stage:
     
 ### Notebook Outputs
 
-For each dataset (positive and negative), the notebook generates:
+For each dataset (**positive** and **negative**), the notebook generates:
 
 * **Duplicate XML**
   Contains images identified as duplicates across both old and new datasets
@@ -267,6 +286,9 @@ For each dataset (positive and negative), the notebook generates:
 
 * **Unique Old XML**
   Contains only unique images from the existing dataset after duplicate removal
+
+* **Combined Unique XML**
+  Contains merged unique images from both new and old datasets
 
 These XML files are used to finalize dataset selection and retrieve the corresponding filtered images.
 
