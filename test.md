@@ -52,15 +52,14 @@ Use this script: [image_rename.py](https://github.com/username/repo-name/blob/ma
 **Naming format:**
 
 ```text
-{PREFIX}_{folder_name}_{DATE}_{time_str}_{seq}{ext}
+{PREFIX}_{DATE}_{folder_name}_{seq}{ext}
 ```
 
 **Components:**
 
 * `PREFIX` → Dataset identifier (e.g., `dd15`, `dd16`)
+* `DATE` → Derived from parent folder, formatted as `YY-MM-DD`
 * `folder_name` → Name of the subfolder (e.g., `flug-01`, `flug-02`)
-* `DATE` → Derived from parent folder, formatted as `DD-MM-YYYY`
-* `time_str` → Time of the first image in the subfolder, reused for all images
 * `seq` → Sequence number to ensure uniqueness
 * `ext` → File extension (e.g., `.png`)
 
@@ -75,7 +74,7 @@ orig_00000.png
 Output:
 
 ```text
-dd15_flug-01_09-04-2026_12-32-03_000000.png
+dd15_26-04-09_flug-01_000000.png
 ```
 
 
@@ -184,7 +183,7 @@ impact filtering stage.
 * **Low confidence**
 * **Multiple detections (mixed confidence)**
 
-In addition, images from **Multiple detections (high confidence)** may also be included **only if they are manually verified as false positives**. All other correctly detected images from this category are excluded from further processing.
+  - In addition, images from **Multiple detections (high confidence)** may also be included **only if they are manually verified as false positives**. All other correctly detected images from this category are excluded from further processing.
 
 
 
@@ -195,8 +194,7 @@ In addition, images from **Multiple detections (high confidence)** may also be i
 * **Multiple detections (mixed confidence)**
 * **Multiple detections (high confidence)**
 
-**Note:**
-If detections are present, images may be optionally reviewed to verify whether the detections correspond to actual targets; however, this step is not strictly required.
+  - If detections are present, images may be optionally reviewed to verify whether the detections correspond to actual targets; however, this step is not strictly required.
 
 
 The `Model_filtering.py` script also generates **XML files** for each category. These XML files are used to group and manage images in subsequent filtering stages.
@@ -319,13 +317,38 @@ It is also recommended to familiarize yourself with the basic functions and tool
 After installation, follow these steps:
 
 * Open a browser and navigate to: [http://localhost:8080/](http://localhost:8080/)
-* Create a new project *(see GIF)*
-* Zip the image folder before uploading
-* Create a new task *(see GIF)*
-* Start labeling *(see GIF)*
-* Export the dataset *(see GIF)*
+* Create a new project *(see demo)*
+* Run the inference step again on the output of the high-impact filtering stage for the **positive dataset**
+* Use the script to convert multiple `.txt` files into a single XML annotation file
+* Zip the image folder before uploading *(use original images, not outputs from any filtering stage)*
+* Create a new task *(see demo)*
+* Upload the model-predicted annotation file *(see demo)*
+* Start labeling *(see demo)*
+* Remove any false detections and adjust bounding boxes if required
+* Export the **CVAT annotation file** *(see demo)*
 
-Before starting labeling, refer to the labeling guidelines.
+Before starting the labeling process, refer to the labeling guidelines.
+
+---
+
+## 6. Data Versioning and Storage
+
+After labeling is completed and the dataset is exported, the final step is to upload the dataset to LakeFS for versioning and storage.
+
+Follow these steps:
+
+1. For the **positive dataset**, merge the exported CVAT XML (new positive images) with the **Unique Old XML** obtained from the high-impact filtering stage.
+
+2. For the **negative dataset**, use the **Combined Unique XML** obtained from the high-impact filtering stage.
+
+3. Rename both annotation files according to the next version (based on the current annotation file naming).
+
+4. Upload the **new positive and negative images** to their respective directories in LakeFS
+   *(only upload new unique images; do not upload old images again)*
+
+5. Upload the updated annotation files to the corresponding folders in LakeFS and remove the old versions.
+
+6. Commit the changes with a proper commit message.
 
 
 
