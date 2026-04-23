@@ -303,7 +303,29 @@ If the new incoming dataset contains only similar samples, a unique (controllabl
 - This can be achieved using the script [create-cvat-xml-6-frame.py](create-cvat-xml-6-frame.py).
 - The constant sampling rate needs to be calculated based on the project requirement.
 
+  
+## 5. Data Labelling
 
+After the data has been extracted, preprocessed, sorted, and filtered, the next step is labeling.
+
+For labeling, the CVAT tool is used. Follow the official quick installation guide for both Windows and Linux:
+[https://docs.cvat.ai/docs/administration/community/basics/installation/](https://docs.cvat.ai/docs/administration/community/basics/installation/)
+
+It is also recommended to familiarize yourself with the basic functions and tools of CVAT before starting:
+[https://docs.cvat.ai/docs/workspace/](https://docs.cvat.ai/docs/workspace/)
+
+### Labelling Workflow
+
+After installation, follow these steps:
+
+* Open a browser and navigate to: [http://localhost:8080/](http://localhost:8080/)
+* Create a new project *(see GIF)*
+* Zip the image folder before uploading
+* Create a new task *(see GIF)*
+* Start labeling *(see GIF)*
+* Export the dataset *(see GIF)*
+
+Before starting labeling, refer to the labeling guidelines.
 
 
 
