@@ -305,6 +305,7 @@ After installation, follow these steps:
 
 * Open a browser and navigate to: [http://localhost:8080/](http://localhost:8080/)
 * Create a new project *(see demo)*
+![Create Project](synthetic_data_generation/3d.gif)
 * Run the inference step again on the output of the high-impact filtering stage for the **positive dataset**
 * Use the script to convert multiple `.txt` files into a single XML annotation file
 * Zip the image folder before uploading *(use original images, not outputs from any filtering stage)*
