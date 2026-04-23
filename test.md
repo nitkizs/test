@@ -29,7 +29,6 @@ The extraction process includes:
 * Ensuring all subfolders are properly unpacked
 * Preserving the original folder structure
 
-
 ---
 
 ## 3. Data Preprocessing
@@ -47,7 +46,9 @@ Verifies the integrity of the images to ensure no corrupted files are present.
 ### 3.2 Image Renaming
 
 All images are renamed to follow a consistent naming convention. The renaming is performed using the provided scripts and applied across all subfolders.
-Use this script: [image_rename.py](https://github.com/username/repo-name/blob/main/scripts/image_rename.py)
+
+Use this script:
+[image_rename.py](https://github.com/username/repo-name/blob/main/scripts/image_rename.py)
 
 **Naming format:**
 
@@ -77,6 +78,7 @@ Output:
 dd15_26-04-09_flug-01_000000.png
 ```
 
+---
 
 # 4. Data Filtering
 
@@ -93,7 +95,8 @@ The initial filtering step is performed manually to separate the dataset into po
 
 Before starting the filtering process, refer to the provided guideline (link) to understand edge cases for both positive and negative samples. Mistakes made at this stage will propagate through subsequent stages, so careful inspection is essential.
 
-**Note:** Images in which the drone appears below the horizon, for example with backgrounds such as ground, trees, or mountains, are treated as negative samples and are used as part of the negative dataset in subsequent stages.
+**Note:**
+Images in which the drone appears below the horizon, for example with backgrounds such as ground, trees, or mountains, are treated as negative samples and are used as part of the negative dataset in subsequent stages.
 
 ---
 
@@ -154,7 +157,9 @@ python test_images.py \
 
 The inference output (bounding box images and .txt label files) is further processed using a filtering script to categorize images based on detection results and confidence thresholds.
 A threshold value (typically between 0.7 and 0.9 depending on requirements) is used to classify detections.
-Use this script: [model_filtering.py](https://github.com/username/repo-name/blob/main/scripts/image_rename.py)
+
+Use this script:
+[model_filtering.py](https://github.com/username/repo-name/blob/main/scripts/image_rename.py)
 
 The script groups outputs into the following categories:
 
@@ -181,9 +186,9 @@ The filtered categories are used differently for positive and negative datasets 
 * **Low confidence**
 * **Multiple detections (mixed confidence)**
 
-  - In addition, images from **Multiple detections (high confidence)** may also be included **only if they are manually verified as false positives**. All other correctly detected images from this category are excluded from further processing.
+  * In addition, images from **Multiple detections (high confidence)** may also be included **only if they are manually verified as false positives**. All other correctly detected images from this category are excluded from further processing.
 
-
+---
 
 **For the Negative Dataset, the following categories are used:**
 
@@ -192,8 +197,9 @@ The filtered categories are used differently for positive and negative datasets 
 * **Multiple detections (mixed confidence)**
 * **Multiple detections (high confidence)**
 
-  - If detections are present, images may be optionally reviewed to verify whether the detections correspond to actual targets; however, this step is not strictly required.
+  * If detections are present, images may be optionally reviewed to verify whether the detections correspond to actual targets; however, this step is not strictly required.
 
+---
 
 The `Model_filtering.py` script also generates **XML files** for each category. These XML files are used to group and manage images in subsequent filtering stages.
 
@@ -202,20 +208,20 @@ The images generated during model filtering should **not** be used for further p
 
 ---
 
-
 ## 4.3 High-Impact Filtering (Uniqueness Filtering)
 
-The new incoming data can be similar to the existing dataset, so it is important not to blindly add this to the training set..This stage focuses on removing duplicate and near-duplicate images to improve dataset quality, reduce redundancy, and ensure diversity for model training.
+The new incoming data can be similar to the existing dataset, so it is important not to blindly add this to the training set.
+This stage focuses on removing duplicate and near-duplicate images to improve dataset quality, reduce redundancy, and ensure diversity for model training.
 
 Unlike previous filtering stages, the new dataset is not processed independently. Instead, it is combined with the previously used training dataset to identify and remove redundant samples across both datasets.
 
 The process is applied separately to the positive and negative datasets and uses DINOv2 for feature-based similarity comparison.
 
-Key Benefits of Duplicate Filtering:
- * Avoid Overfitting: Reduces the risk of overfitting by eliminating redundant images.
- * Prevent Model Bias: Ensures the model is trained on a diverse set of images.
- * Improve Training Efficiency: Optimizes training time by reducing the number of images.
+**Key Benefits of Duplicate Filtering:**
 
+* Avoid Overfitting: Reduces the risk of overfitting by eliminating redundant images.
+* Prevent Model Bias: Ensures the model is trained on a diverse set of images.
+* Improve Training Efficiency: Optimizes training time by reducing the number of images.
 
 ---
 
@@ -225,8 +231,7 @@ Before executing this stage:
 
 * Generate **CVAT XML files** for the new datasets (both positive and negative) using `Generate_cvat_xml.py`
 
-* Download the **current positive and negative datasets** from the database via LakeFS
-  *(refer to guide: link)*
+* Download the **current positive and negative datasets** from the database via LakeFS *(refer to guide: link)*
 
 * Download the corresponding **CVAT XML annotations** for both datasets directly from the LakeFS UI
   ([http://ai-lakefs.int.draive.com:8000/repositories](http://ai-lakefs.int.draive.com:8000/repositories) — access required)
@@ -234,10 +239,7 @@ Before executing this stage:
 * Combine datasets:
 
   * Old Positive images + New Positive images → single directory
-  * Old Negative images  + New Negative images → single directory
-
-
-
+  * Old Negative images + New Negative images → single directory
 
 ---
 
@@ -259,17 +261,8 @@ Before executing this stage:
     * **Positive dataset**
     * **Negative dataset**
 
-- The notebook performs the following tasks:
-  - Load the dataset to FiftyOne, which consists of an image directory and an XML file corresponding to these images.
-  - Next, select an AI model(DINOv2) to use. The selected AI model will be used to generate image embeddings for all the images in the dataset.
-    - An image embedding is a numeric representation of an image that encodes the semantics of contents in the image. 
-    - Embeddings are calculated by computer vision models which are usually trained with large datasets of pairs of text and image.
-  - Once the images embeddings are created, you will compute the uniqueness of each image by choosing a threshold percentage. 
-  - If the similarity between images falls below the threshold, they will be considered duplicates.
-  - Finally, an XML file will be generated containing only the unique images.
-  - Optionally, you can launch the FiftyOne app to visualize the duplicates and better understand the results.
- 
-    
+---
+
 ### Notebook Outputs
 
 For each dataset (**positive** and **negative**), the notebook generates:
@@ -292,14 +285,16 @@ If the new incoming dataset contains unique samples, these will be exported as a
 
 If the new incoming dataset contains only similar samples, a unique (controllable) subset of the new data can be exported for labeling, and the similar samples from the existing training dataset will be deleted. The updated training dataset will also be exported as a CVAT XML file.
 
+---
 
-### **Additional requirements**
+### Additional requirements
 
-- Based on the requirement of the project, the data can be sampled using a constant sampling rate.
-- This can be achieved using the script [create-cvat-xml-6-frame.py](create-cvat-xml-6-frame.py).
-- The constant sampling rate needs to be calculated based on the project requirement.
+* Based on the requirement of the project, the data can be sampled using a constant sampling rate.
+* This can be achieved using the script [create-cvat-xml-6-frame.py](create-cvat-xml-6-frame.py).
+* The constant sampling rate needs to be calculated based on the project requirement.
 
-  
+---
+
 ## 5. Data Labelling
 
 After the data has been extracted, preprocessed, sorted, and filtered, the next step is labeling.
@@ -309,6 +304,8 @@ For labeling, the CVAT tool is used. Follow the official quick installation guid
 
 It is also recommended to familiarize yourself with the basic functions and tools of CVAT before starting:
 [https://docs.cvat.ai/docs/workspace/](https://docs.cvat.ai/docs/workspace/)
+
+---
 
 ### Labelling Workflow
 
@@ -348,11 +345,5 @@ Follow these steps:
 
 6. Commit the changes with a proper commit message.
 
-
-
-
-
-
-
-
+---
 
