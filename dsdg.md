@@ -1,18 +1,7 @@
-Got it—you want this as a **clean documentation section** (like the rest of your pipeline). Here’s a polished version you can directly put into your `.md`:
-
----
-
-## Downloading Data from lakeFS
+## Downloading Data from LakeFS
 
 This section describes how to download images from lakeFS using S3-compatible tools.
-
-lakeFS provides an **S3-compatible API**, which allows data access using standard tools such as the AWS CLI.
-
----
-
-### Option A: Using AWS CLI (Recommended)
-
-This is the fastest and most reliable method to download large datasets.
+LakeFS provides an **S3 compatible API**, which allows data access using standard tools such as the AWS CLI.
 
 ---
 
@@ -67,7 +56,7 @@ aws s3 cp "s3://<repository>/<branch>/<path>" "<local_destination>" --recursive 
 **Example:**
 
 ```powershell
-aws s3 cp "s3://uaiv-dataset/main/images-mu" "D:\Draive\Data Sets\updated_whole_dataset\mavic" --recursive --endpoint-url "http://ai-lakefs:8000"
+aws s3 cp "s3://uaiv-dataset/main/images-mu" "D:\Draive\Data Sets\mavic" --recursive --endpoint-url "http://ai-lakefs:8000"
 ```
 
 ---
@@ -86,9 +75,3 @@ aws s3 cp "s3://uaiv-dataset/main/images-mu" "D:\Draive\Data Sets\updated_whole_
 
 ---
 
-If you want, I can also add:
-
-* upload instructions (push to lakeFS)
-* or a `sync` command (better for updates)
-
-Just say 👍
