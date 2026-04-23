@@ -175,8 +175,6 @@ Repeat this process for both positive and negative filtered images and save the 
 
 The filtered categories are used differently for positive and negative datasets for high impact filtering.
 
-impact filtering stage.
-
 **For the positive dataset, the following categories are used:**
 
 * **No detections**
