@@ -257,7 +257,7 @@ Before executing this stage:
 
   * Update the following parameters:
 
-    * Image directory (combined old + new datasets)
+    * Image directory
     * XML annotation files
     * Output directory
     * Threshold value *(adjust based on similarity requirements to achieve the desired dataset balance, e.g., ~10–12% negatives relative to positives)*
@@ -303,6 +303,8 @@ For labeling, the CVAT tool is used. Follow the official quick installation guid
 It is also recommended to familiarize yourself with the basic functions and tools of CVAT before starting:
 [https://docs.cvat.ai/docs/workspace/](https://docs.cvat.ai/docs/workspace/)
 
+Before starting the labeling process, refer to the labeling guidelines.
+
 ---
 
 ### Labelling Workflow
@@ -311,20 +313,19 @@ After installation, follow these steps:
 
 * Open a browser and navigate to: [http://localhost:8080/](http://localhost:8080/)
 * Create a new project
-![Create Project](assets/create_new_project.gif)
+    ![Create Project](assets/create_new_project.gif)
 * Run the inference step again on the output of the high impact filtering stage for the **positive dataset**
-* Use the script [`convert_txt_xml.py`](scripts/convert_txt_xml.py) again to convert multiple `.txt` files into a single model-predicted XML annotation file
+* Use the script [`convert_txt_xml.py`](scripts/convert_txt_xml.py) again to convert multiple `.txt` files in the labels folder into a single model predicted XML annotation file
 * Zip the image folder before uploading *(use original images, not outputs from any filtering stage)*
 * Create a new task 
   ![Create New_Task](assets/create_new_task.gif)
-* Upload the model predicted annotation file
+* Upload the model predicted annotation file and start labeling
   ![Upload annoatation file](assets/label.gif)
-* Start labeling
 * Remove any false detections and adjust bounding boxes if required
 * Export the **CVAT annotation file** *(see demo)*
    ![Upload annoatation file](assets/export_data.gif)
 
-Before starting the labeling process, refer to the labeling guidelines.
+
 
 ---
 
@@ -334,13 +335,13 @@ After labeling is completed and the dataset is exported, the final step is to up
 
 Follow these steps:
 
-1. For the **positive dataset**, merge the exported CVAT XML (new positive images) with the **Unique Old XML** obtained from the high-impact filtering stage.
+1. For the **positive dataset**, merge the labeled CVAT XML of the **new positive images** with the **Unique Old XML** obtained from the high-impact filtering stage using [`merge_xmls.py`](scripts/merge_xmls.py).
 
-2. For the **negative dataset**, use the **Combined Unique XML** obtained from the high-impact filtering stage.
+2. For the **negative dataset**, use the **Combined Unique XML** obtained from the high impact filtering stage.
 
 3. Rename both annotation files according to the next version (based on the current annotation file naming).
 
-4. Upload the **new positive and negative images** to their respective directories in LakeFS
+4. Upload the new positive and new negative images to the image directory in LakeFS.
    *(only upload new unique images; do not upload old images again)*
 
 5. Upload the updated annotation files to the corresponding folders in LakeFS and remove the old versions.
