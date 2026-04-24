@@ -48,7 +48,7 @@ Verifies the integrity of the images to ensure no corrupted files are present.
 All images are renamed to follow a consistent naming convention. The renaming is performed using the provided scripts and applied across all subfolders.
 
 Use this script:
-[rename_images.py](scripts/rename_images.py)
+[`rename_images.py`](scripts/rename_images.py)
 
 **Naming format:**
 
@@ -159,7 +159,7 @@ The inference output (bounding box images and .txt label files) is further proce
 A threshold value (typically between 0.7 and 0.9 depending on requirements) is used to classify detections.
 
 Use this script:
-[model_filtering.py](https://github.com/username/repo-name/blob/main/scripts/image_rename.py)
+[`model_prediction_filtering.py`](scripts/model_prediction_filtering.py)
 
 The script groups outputs into the following categories:
 
@@ -170,7 +170,7 @@ The script groups outputs into the following categories:
 * **Multiple detections (high confidence)** – all detections above the threshold
 
 **Important:**
-For the positive dataset, images with multiple detections require manual verification. These cases may include all correct detections, a mix of correct and false detections, or entirely false detections. Carefully review these images using the verification script (link), which can also be used to inspect results and generate XML files if required.
+For the positive dataset, images with multiple detections require manual verification. These cases may include all correct detections, a mix of correct and false detections, or entirely false detections. Carefully review these images using the [verification script](image_review_selection.py), which can also be used to inspect results and generate XML files if required.
 
 Repeat this process for both positive and negative filtered images and save the outputs separately for further filtering stages.
 
@@ -229,9 +229,15 @@ The process is applied separately to the positive and negative datasets and uses
 
 Before executing this stage:
 
-* Generate **CVAT XML files** for the new datasets (both positive and negative) using `Generate_cvat_xml.py`
+* From the inference outputs, **select the appropriate categories (folders/groups)** based on whether you are preparing **positive or negative datasets** (as defined above)
 
-* Download the **current positive and negative datasets** from the database via LakeFS *(refer to guide: link)*
+* **Merge the selected categories into a single folder** for each dataset (positive and negative separately)
+
+* Convert the resulting multiple `.txt` annotation files into a **single CVAT XML file** using [`convert_txt_xml.py`](scripts/convert_txt_xml.py)
+
+* These generated XML files are then considered as the **new positive and new negative datasets** for further processing
+
+* Download the **current positive and negative datasets** from the database via LakeFS *(refer to guide: [`Download_data_from_LakeFS.md`](Downloading_Data_from_LakeFS.md)*
 
 * Download the corresponding **CVAT XML annotations** for both datasets directly from the LakeFS UI
   ([http://ai-lakefs.int.draive.com:8000/repositories](http://ai-lakefs.int.draive.com:8000/repositories) — access required)
@@ -247,7 +253,7 @@ Before executing this stage:
 
 * This filtering step is performed using a Jupyter Notebook built with the [fiftyone-library](https://docs.voxel51.com/).
 
-* Run the **near-duplicate filtering notebook (`near-duplicate-filter.ipynb`)**:
+* Run the near-duplicate filtering notebook [`HI-Filter.ipynb`](scripts/HI-Filter.ipynb):
 
   * Update the following parameters:
 
@@ -279,17 +285,17 @@ For each dataset (**positive** and **negative**), the notebook generates:
 * **Combined Unique XML**
   Contains merged unique images from both new and old datasets
 
-These XML files are used to finalize dataset selection and retrieve the corresponding filtered images.
 
 If the new incoming dataset contains unique samples, these will be exported as a CVAT XML file for labeling.
 
 If the new incoming dataset contains only similar samples, a unique (controllable) subset of the new data can be exported for labeling, and the similar samples from the existing training dataset will be deleted. The updated training dataset will also be exported as a CVAT XML file.
 
+
 ---
 
 ## 5. Data Labelling
 
-After the data has been extracted, preprocessed, sorted, and filtered, the next step is labeling.
+After the data has been extracted, preprocessed, sorted and filtered, the next step is labeling.
 
 For labeling, the CVAT tool is used. Follow the official quick installation guide for both Windows and Linux:
 [https://docs.cvat.ai/docs/administration/community/basics/installation/](https://docs.cvat.ai/docs/administration/community/basics/installation/)
@@ -304,16 +310,19 @@ It is also recommended to familiarize yourself with the basic functions and tool
 After installation, follow these steps:
 
 * Open a browser and navigate to: [http://localhost:8080/](http://localhost:8080/)
-* Create a new project *(see demo)*
-![Create Project](synthetic_data_generation/3d.gif)
-* Run the inference step again on the output of the high-impact filtering stage for the **positive dataset**
-* Use the script to convert multiple `.txt` files into a single XML annotation file
+* Create a new project
+![Create Project](assets/create_new_project.gif)
+* Run the inference step again on the output of the high impact filtering stage for the **positive dataset**
+* Use the script [`convert_txt_xml.py`](scripts/convert_txt_xml.py) again to convert multiple `.txt` files into a single model-predicted XML annotation file
 * Zip the image folder before uploading *(use original images, not outputs from any filtering stage)*
-* Create a new task *(see demo)*
-* Upload the model-predicted annotation file *(see demo)*
-* Start labeling *(see demo)*
+* Create a new task 
+  ![Create New_Task](assets/create_new_task.gif)
+* Upload the model predicted annotation file
+  ![Upload annoatation file](assets/label.gif)
+* Start labeling
 * Remove any false detections and adjust bounding boxes if required
 * Export the **CVAT annotation file** *(see demo)*
+   ![Upload annoatation file](assets/export_data.gif)
 
 Before starting the labeling process, refer to the labeling guidelines.
 
