@@ -237,7 +237,7 @@ Before executing this stage:
 
 * The generated XML files are then considered as the **new positive and new negative datasets** for further processing.
 
-* Download the **current positive and negative datasets** from the database via LakeFS *(refer to guide: [`Download_data_from_LakeFS.md`](Downloading_Data_from_LakeFS.md)*
+* Download the **current positive and negative datasets** from the database via LakeFS *(refer to guide: [`Download_data_from_LakeFS.md`](assets/Downloading_Data_from_LakeFS.md)*
 
 * Download the corresponding **CVAT XML annotations** for both datasets directly from the LakeFS UI
   ([http://ai-lakefs.int.draive.com:8000/repositories](http://ai-lakefs.int.draive.com:8000/repositories) — access required)
