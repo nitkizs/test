@@ -1,6 +1,6 @@
 # Data Engineering
 
-The Data Engineering stage of the AI-Workflow-Toolkit focuses on preparing raw data for downstream tasks. It includes data collection, extraction, and preprocessing, ensuring that the dataset is structured, consistent, and ready for further use.
+The Data Engineering stage of the AI-Workflow-Toolkit prepares raw data for downstream tasks. It includes Data Collection, Extraction, Preprocessing, Filtering, Labelling, and Versioning & Storage, ensuring the dataset is structured, consistent, and ready for use.
 
 ---
 
@@ -48,7 +48,7 @@ Verifies the integrity of the images to ensure no corrupted files are present.
 All images are renamed to follow a consistent naming convention. The renaming is performed using the provided scripts and applied across all subfolders.
 
 Use this script:
-[image_rename.py](https://github.com/username/repo-name/blob/main/scripts/image_rename.py)
+[rename_images.py](scripts/rename_images.py)
 
 **Naming format:**
 
@@ -93,7 +93,7 @@ The initial filtering step is performed manually to separate the dataset into po
 * **Positive images** contain the target object (UAV)
 * **Negative images** do not contain the target object
 
-Before starting the filtering process, refer to the provided guideline (link) to understand edge cases for both positive and negative samples. Mistakes made at this stage will propagate through subsequent stages, so careful inspection is essential.
+Before starting the filtering process, refer to the provided guideline to understand edge cases for both positive and negative samples. Mistakes made at this stage will propagate through subsequent stages, so careful inspection is essential.
 
 **Note:**
 Images in which the drone appears below the horizon, for example with backgrounds such as ground, trees, or mountains, are treated as negative samples and are used as part of the negative dataset in subsequent stages.
