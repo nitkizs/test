@@ -340,7 +340,7 @@ After installation, follow these steps:
 * Upload the model predicted annotation file and start labeling
   ![Upload annoatation file](assets/label.gif)
 * Remove any false detections and adjust bounding boxes if required
-* Export the **CVAT annotation file** *(see demo)*
+* Export the **CVAT annotation file**
    ![Upload annoatation file](assets/export_data.gif)
 * After exporting the annotation file, the image names may include the ZIP folder name as a prefix (e.g., `"flug-01_positive/dd15_13-04-2026_flug-01_013930.png"`). This can cause path mismatches in downstream processing.
 
