@@ -100,13 +100,13 @@ Before starting the filtering process, refer to the provided guideline to unders
 Steps:
 
 * Review all images and identify **positive sequences** based on filename indices.
-  Example: `dd15_13-04-2026_flug-01_013930.png` → index: `013930`
+  Example: `dd15_13-04-2026_flug-01_013930.png` → index: `13930`
 
 * Record positive ranges in a text file (one range per line):
 
   ```text
-  013930-014000
-  014250-014310
+  13930-14000
+  14250-14310
   ```
 
 * Run [`filter_pos_neg_images.py`](scripts/filter_pos_neg_images.py) to automate separation.
