@@ -324,6 +324,9 @@ After installation, follow these steps:
 * Remove any false detections and adjust bounding boxes if required
 * Export the **CVAT annotation file** *(see demo)*
    ![Upload annoatation file](assets/export_data.gif)
+* After exporting the annotation file, the image names may include the ZIP folder name as a prefix (e.g., `"flug-01_positive/dd15_13-04-2026_flug-01_013930.png"`). This can cause path mismatches in downstream processing.
+
+* Use [`strip_prefix_xml.py`](scripts/strip_prefix_xml.py) to **strip the prefix and retain only the image filename** before uploading to LakeFS.
 
 
 
