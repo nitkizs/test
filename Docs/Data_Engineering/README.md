@@ -82,7 +82,7 @@ dd15_26-04-09_flug-01_000000.png
 
 ## 4. Data Filtering
 
-The dataset undergoes multiple filtering stages to improve quality and remove noise for model training. The filtering pipeline is divided into three stages: manual filtering, model based filtering and high-impact (uniqueness) filtering.
+The dataset undergoes multiple filtering stages to improve quality and remove noise for model training. The filtering pipeline is divided into three stages: manual filtering, model based filtering and high impact (uniqueness) filtering.
 
 ---
 
