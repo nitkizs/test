@@ -140,7 +140,7 @@ A trained model is used to generate predictions on the dataset.
 * `--data` → Path to the `.data` configuration file
 * `--weights` → Path to the trained model (`.pth`)
 * `--img` → Directory containing input images
-* `--channels` → Number of input channels (default: 3)
+* `--channels` → Number of input channels (default:3, Use 1 for grayscale images and 3 for RGB images)
 * `--viz` → Enable visualization output in video format
 * `--conf` → Confidence threshold for detections
 * `--iou` → IoU threshold
