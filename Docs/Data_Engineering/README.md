@@ -1,6 +1,6 @@
 # Data Engineering
 
-The Data Engineering stage of the AI-Workflow-Toolkit prepares raw data for downstream tasks. It includes Data Collection, Extraction, Preprocessing, Filtering, Labelling, and Versioning & Storage, ensuring the dataset is structured, consistent, and ready for use.
+The Data Engineering stage of the AI-Workflow-Toolkit prepares raw data for downstream tasks. It includes Data Collection, Extraction, Preprocessing, Filtering, Labelling and Versioning & Storage, ensuring the dataset is structured, consistent and ready for use.
 
 ---
 
