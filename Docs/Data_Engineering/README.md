@@ -88,15 +88,35 @@ The dataset undergoes multiple filtering stages to improve quality and remove no
 
 ### 4.1 Manual Positive–Negative Filtering
 
-The initial filtering step is performed manually to separate the dataset into positive and negative samples.
+The initial filtering step is performed manually to separate the dataset into **positive** and **negative** samples.
 
-* **Positive images** contain the target object (UAV)
-* **Negative images** do not contain the target object
+* **Positive images** contain the target object (UAV).
+* **Negative images** do not contain the target object.
 
 Before starting the filtering process, refer to the provided guideline to understand edge cases for both positive and negative samples. Mistakes made at this stage will propagate through subsequent stages, so careful inspection is essential.
 
-**Note:**
-Images in which the drone appears below the horizon, for example with backgrounds such as ground, trees, or mountains, are treated as negative samples and are used as part of the negative dataset in subsequent stages.
+**Note:** Images where the UAV appears below the horizon (e.g., with backgrounds such as ground, trees or mountains) are considered negative samples.
+
+---
+
+#### Manual Filtering and Image Separation
+
+* Review all images and identify **positive sequences** based on filename indices.
+  Example: `dd15_13-04-2026_flug-01_013930.png` → index: `013930`
+
+* Record positive ranges in a text file (one range per line):
+
+  ```text
+  013930-014000
+  014250-014310
+  ```
+
+* Run [`filter_pos_neg_images.py`](scripts/filter_pos_neg_images.py) to automate separation.
+
+* The script:
+
+  * Moves images within specified ranges to `positive_images/`
+  * Moves remaining images to `negative_images/`
 
 ---
 
