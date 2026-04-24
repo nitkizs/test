@@ -1,4 +1,4 @@
-## Downloading Data from LakeFS
+## Download Data from LakeFS
 
 This section describes how to download images from lakeFS using S3-compatible tools.
 LakeFS provides an **S3 compatible API**, which allows data access using standard tools such as the AWS CLI.
