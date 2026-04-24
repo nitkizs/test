@@ -97,9 +97,7 @@ Before starting the filtering process, refer to the provided guideline to unders
 
 **Note:** Images where the UAV appears below the horizon (e.g., with backgrounds such as ground, trees or mountains) are considered negative samples.
 
----
-
-#### Manual Filtering and Image Separation
+Steps:
 
 * Review all images and identify **positive sequences** based on filename indices.
   Example: `dd15_13-04-2026_flug-01_013930.png` → index: `013930`
