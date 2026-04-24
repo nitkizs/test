@@ -82,11 +82,11 @@ dd15_26-04-09_flug-01_000000.png
 
 ## 4. Data Filtering
 
-The dataset undergoes multiple filtering stages to improve quality and remove noise for model training. The filtering pipeline is divided into three stages: manual filtering, model-based filtering, and high-impact (uniqueness) filtering.
+The dataset undergoes multiple filtering stages to improve quality and remove noise for model training. The filtering pipeline is divided into three stages: manual filtering, model based filtering and high-impact (uniqueness) filtering.
 
 ---
 
-### 4.1 Positive–Negative Filtering
+### 4.1 Manual Positive–Negative Filtering
 
 The initial filtering step is performed manually to separate the dataset into positive and negative samples.
 
@@ -100,7 +100,7 @@ Images in which the drone appears below the horizon, for example with background
 
 ---
 
-### 4.2 Model-Based Filtering
+### 4.2 Model Based Filtering
 
 Model-based filtering refines the dataset using a latest trained detection model. This process is applied separately to positive and negative datasets and consists of two stages: inferencing and filtering.
 
@@ -133,7 +133,7 @@ A trained model is used to generate predictions on the dataset.
 
 * Latest trained `.pth` model
 * Compatible `.data` file
-* `uav_sq.names` file (Ensure that this file contains the correct class name corresponding to the actual target, "Mavic". The file must be placed in the path specified in the `.data` configuration file.)
+* `uav_sq.names` file (Ensure that this file contains the correct class name corresponding to the actual target, "Mavic" and this file must be placed in the path specified in the `.data` configuration file.)
 
 **Execution example:**
 
@@ -165,12 +165,12 @@ The script groups outputs into the following categories:
 
 * **No detections** – images with no detected objects
 * **Low confidence** – detections below the defined threshold
-* **High confidence** – detections above the defined threshold
+* **Single detection (high confidence)** – detections above the defined threshold
 * **Multiple detections (mixed confidence)** – at least one detection below the threshold
 * **Multiple detections (high confidence)** – all detections above the threshold
 
 **Important:**
-For the positive dataset, images with multiple detections require manual verification. These cases may include all correct detections, a mix of correct and false detections, or entirely false detections. Carefully review these images using the [verification script](image_review_selection.py), which can also be used to inspect results and generate XML files if required.
+For the positive dataset, images within multiple detections(high confidence) group require manual verification. These cases may include all correct detections, a mix of correct and false detections, or entirely false detections. Carefully review these images using the [verification script](image_review_selection.py), which can also be used to inspect results and generate XML files if required.
 
 Repeat this process for both positive and negative filtered images and save the outputs separately for further filtering stages.
 
@@ -208,14 +208,14 @@ The images generated during model filtering should **not** be used for further p
 
 ---
 
-### 4.3 High-Impact Filtering (Uniqueness Filtering)
+### 4.3 High Impact Filtering (Uniqueness Filtering)
 
 The new incoming data can be similar to the existing dataset, so it is important not to blindly add this to the training set.
-This stage focuses on removing duplicate and near-duplicate images to improve dataset quality, reduce redundancy, and ensure diversity for model training.
+This stage focuses on removing duplicate and near duplicate images to improve dataset quality, reduce redundancy and ensure diversity for model training.
 
 Unlike previous filtering stages, the new dataset is not processed independently. Instead, it is combined with the previously used training dataset to identify and remove redundant samples across both datasets.
 
-The process is applied separately to the positive and negative datasets and uses DINOv2 for feature-based similarity comparison.
+The process is applied separately to the positive and negative datasets and uses DINOv2 for feature based similarity comparison.
 
 **Key Benefits of Duplicate Filtering:**
 
@@ -229,13 +229,13 @@ The process is applied separately to the positive and negative datasets and uses
 
 Before executing this stage:
 
-* From the inference outputs, **select the appropriate categories (folders/groups)** based on whether you are preparing **positive or negative datasets** (as defined above)
+* From the inference outputs, select the appropriate categories (groups) of label folders based on whether you are preparing **positive or negative datasets**, as defined in the filtering section.
 
-* **Merge the selected categories into a single folder** for each dataset (positive and negative separately)
+* Move all `.txt` annotation files from the selected categories into a single folder per dataset (one for positive and one for negative).
 
-* Convert the resulting multiple `.txt` annotation files into a **single CVAT XML file** using [`convert_txt_xml.py`](scripts/convert_txt_xml.py)
+* Convert the collected `.txt` annotation files into a single CVAT XML file using [`convert_txt_xml.py`](scripts/convert_txt_xml.py).
 
-* These generated XML files are then considered as the **new positive and new negative datasets** for further processing
+* The generated XML files are then considered as the **new positive and new negative datasets** for further processing.
 
 * Download the **current positive and negative datasets** from the database via LakeFS *(refer to guide: [`Download_data_from_LakeFS.md`](Downloading_Data_from_LakeFS.md)*
 
@@ -253,7 +253,7 @@ Before executing this stage:
 
 * This filtering step is performed using a Jupyter Notebook built with the [fiftyone-library](https://docs.voxel51.com/).
 
-* Run the near-duplicate filtering notebook [`HI-Filter.ipynb`](scripts/HI-Filter.ipynb):
+* Run the near duplicate filtering notebook [`HI-Filter.ipynb`](scripts/HI-Filter.ipynb):
 
   * Update the following parameters:
 
@@ -274,10 +274,10 @@ Before executing this stage:
 For each dataset (**positive** and **negative**), the notebook generates:
 
 * **Duplicate XML**
-  Contains images identified as duplicates across both old and new datasets
+  Contains all images identified as duplicates across both old and new datasets
 
 * **Unique New XML**
-  Contains only unique images from the incoming dataset after duplicate removal
+  Contains only unique images from the new dataset after duplicate removal
 
 * **Unique Old XML**
   Contains only unique images from the existing dataset after duplicate removal
