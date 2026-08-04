@@ -4,7 +4,7 @@ This project provides a synthetic data generation pipeline for training vision b
 
 The pipeline runs multiple simulation environments in parallel. Each environment contains a fixed observer UAV with a camera and a moving target UAV. RGB images and semantic segmentation are used to identify the target UAV and generate object detection annotations automatically.
 
-To improve dataset diversity, the pipeline applies configurable domain randomization to lighting, observer orientation, target motion, trajectories, and starting poses.
+To improve dataset diversity, the pipeline applies configurable domain randomization to lighting, observer orientation, target motion, trajectories and starting poses.
 
 ## Features
 
@@ -38,8 +38,8 @@ For each captured frame, the pipeline:
 2. identifies the segmentation ID of the target UAV
 3. creates a binary target mask
 4. removes invalid or unrelated mask regions
-5. calculates and validates the target bounding boX
-6. classifies the frame as positive, negative, or skipped
+5. calculates and validates the target bounding box
+6. classifies the frame as positive, negative or skipped
 7. saves the RGB image
 8. creates the YOLO annotation
 9. adds the annotation to the CVAT XML file
@@ -74,7 +74,7 @@ Before an annotation is saved, the pipeline can:
 
 Randomization is applied at batch, simulation run and environment level.
 
-### Batch-Level Randomization
+### Batch Level Randomization
 
 A batch define:
 
@@ -136,7 +136,7 @@ The pipeline requires:
 Follow the official NVIDIA Isaac Sim installation guide:
 
 ```text
-[https://docs.isaacsim.omniverse.nvidia.com/](https://docs.isaacsim.omniverse.nvidia.com/)
+https://docs.isaacsim.omniverse.nvidia.com/
 ```
 
 ### 2. Install Isaac Lab
@@ -167,8 +167,6 @@ pip install -r requirements.txt
 ---
 
 ## Project Structure
-
-A typical project structure is:
 
 ```text
 uaiv-synthetic-datagen/
